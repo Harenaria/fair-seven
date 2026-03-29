@@ -40,7 +40,7 @@ func reset_round() -> void:
 	_round_stats = { 1: _empty_stats(), 2: _empty_stats() }
 
 func _empty_stats() -> Dictionary:
-	return { "total": 0, "golds": 0, "sevens": 0 }
+	return { "total": 0, "golds": 0, "sevens": [] }
 
 # Chiamato da cursor.gd dopo ogni cattura riuscita.
 # cards = combo.cards (carte sul board) + [held_card] (carta lanciata)
@@ -54,9 +54,10 @@ func register_capture(player_id: int, cards: Array[Dictionary]) -> void:
 			s["golds"] += 1
 			if card["value"] == 7:
 				_try_claim(player_id, PointType.FAIR_SEVEN)
-		if card["value"] == 7:
-			s["sevens"] += 1
-			if s["sevens"] >= SEVENS_TOTAL:
+		if card["value"] == 7 and card["suit"] != CardUtils.Suit.NEUTRAL:
+			if not s["sevens"].has(card["suit"]):
+				s["sevens"].append(card["suit"])
+			if s["sevens"].size() >= SEVENS_TOTAL:
 				_try_claim(player_id, PointType.ALL_SEVEN)
 
 	if s["golds"] >= GOLD_THRESHOLD:
@@ -77,8 +78,16 @@ func get_points(player_id: int) -> int:
 	return match_points.get(player_id, 0)
 
 func _try_claim(player_id: int, point_type: PointType) -> void:
+	#if _round_claimed.has(point_type):
+		#if point_type == PointType.GOLDS or point_type == PointType.QUOTA:
+			#var current_holder: int = _round_claimed[point_type]
+			#if current_holder == player_id:
+				#return
+			#match_points[current_holder] -= 1
+		#else:
+			#return
 	if _round_claimed.has(point_type):
-		return  # già reclamato da qualcuno in questo round
+		return
 	_round_claimed[point_type] = player_id
 	match_points[player_id] += 1
 	point_scored.emit(player_id, point_type)
