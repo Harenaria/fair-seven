@@ -22,7 +22,7 @@ func _on_board_cleared(player_id: int) -> void:
 	_start_new_round()
 
 func _board_of(player_id: int) -> Board:
-	return $Board if player_id == 0 else $Board2
+	return $Board if player_id == 1 else $Board2
 	
 func _on_point_scored(player_id: int, point_type: ScoreTracker.PointType) -> void:
 	pass

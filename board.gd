@@ -61,6 +61,8 @@ func remove_card_at(col: int, row: int) -> Dictionary:
 	var card = board[col][row]
 	board[col].remove_at(row)
 	draw_board()
+	if is_empty():
+		board_cleared.emit(player_id)
 	return card
 
 func get_column_height(col: int) -> int:
@@ -78,7 +80,7 @@ func get_next_card_world_pos(col: int) -> Vector2:
 	
 func is_overflowing() -> bool:
 	for col in range(COLUMNS):
-		if get_column_height(col)>=ROWS:
+		if get_column_height(col) >= (ROWS-1):
 			return true
 	return false
 

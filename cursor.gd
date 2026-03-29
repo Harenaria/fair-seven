@@ -153,9 +153,6 @@ func _apply_capture(combo: CaptureResolver.CaptureCombo) -> void:
 		score_tracker.request_garbage_to_opponent(player_id, all_captured.size())
 
 	board.remove_garbage(all_captured.size())
-
-	if board.is_empty() and score_tracker:
-		score_tracker.register_sweep(player_id)
 		
 
 func reset() -> void:

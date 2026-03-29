@@ -15,7 +15,7 @@ signal match_ended(winner_id: int)
 signal send_garbage_to(player_id: int, count: int)
 
 func request_garbage_to_opponent(sender_id: int, count: int) -> void:
-	var receiver_id = int(not bool(sender_id)) + 1
+	var receiver_id = 1 if sender_id == 2 else 2
 	send_garbage_to.emit(receiver_id, count)
 
 const MATCH_WIN_THRESHOLD := 11
@@ -51,9 +51,8 @@ func _empty_stats() -> Dictionary:
 func register_capture(player_id: int, cards: Array[Dictionary]) -> void:
 	var s: Dictionary = _round_stats[player_id]
 	for card in cards:
-		if CardUtils.is_garbage(card):
+		if not CardUtils.is_garbage(card):
 			continue
-	for card in cards:
 		s["total"] += 1
 		if card["suit"] == CardUtils.Suit.GOLD:
 			s["golds"] += 1
@@ -87,5 +86,7 @@ func _try_claim(player_id: int, point_type: PointType) -> void:
 	_round_claimed[point_type] = player_id
 	match_points[player_id] += 1
 	point_scored.emit(player_id, point_type)
+	$Score.text = str(get_points(1))
+	$Score2.text = str(get_points(2))
 	if match_points[player_id] >= MATCH_WIN_THRESHOLD:
 		match_ended.emit(player_id)
