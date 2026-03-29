@@ -15,8 +15,7 @@ signal match_ended(winner_id: int)
 signal send_garbage_to(player_id: int, count: int)
 
 func request_garbage_to_opponent(sender_id: int, count: int) -> void:
-	var receiver_id = 1 if sender_id == 2 else 2
-	send_garbage_to.emit(receiver_id, count)
+	send_garbage_to.emit(3 - sender_id, count)
 
 const MATCH_WIN_THRESHOLD := 11
 const GOLD_THRESHOLD      := 5   # 5/10 carte Denari
@@ -24,7 +23,7 @@ const QUOTA_THRESHOLD     := 20  # 20/40 carte totali
 const SEVENS_TOTAL        := 4
 
 # Punti accumulati nel match (sopravvivono tra round)
-var match_points: Dictionary = { 0: 0, 1: 0 }
+var match_points: Dictionary = { 1: 0, 2: 0 }
 
 # Punti già reclamati in questo round (esclusivi)
 var _round_claimed: Dictionary = {}
@@ -38,10 +37,7 @@ func _ready() -> void:
 # Chiamato a inizio di ogni nuovo round
 func reset_round() -> void:
 	_round_claimed.clear()
-	_round_stats = {
-		0: _empty_stats(),
-		1: _empty_stats()
-	}
+	_round_stats = { 1: _empty_stats(), 2: _empty_stats() }
 
 func _empty_stats() -> Dictionary:
 	return { "total": 0, "golds": 0, "sevens": 0 }
@@ -74,7 +70,7 @@ func register_sweep(player_id: int) -> void:
 
 # Chiamato da board.gd quando la board del loser va in overflow
 func register_reverse_sweep(loser_id: int) -> void:
-	var player_id = not bool(loser_id)
+	var player_id = 3 - loser_id
 	_try_claim(player_id, PointType.REVERSE_SWEEP)
 
 func get_points(player_id: int) -> int:

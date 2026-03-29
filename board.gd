@@ -32,8 +32,6 @@ func get_top_card(col: int):
 func push_card(col: int, card: Dictionary):
 	board[col].append(card)
 	draw_board()
-	if is_overflowing():
-		board_overflowed.emit(player_id)
 
 func pop_card(col: int) -> Dictionary:
 	var res =  board[col].pop_back()
