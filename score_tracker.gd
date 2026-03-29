@@ -47,7 +47,7 @@ func _empty_stats() -> Dictionary:
 func register_capture(player_id: int, cards: Array[Dictionary]) -> void:
 	var s: Dictionary = _round_stats[player_id]
 	for card in cards:
-		if not CardUtils.is_garbage(card):
+		if CardUtils.is_garbage(card):
 			continue
 		s["total"] += 1
 		if card["suit"] == CardUtils.Suit.GOLD:

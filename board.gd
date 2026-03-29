@@ -66,7 +66,7 @@ func remove_card_at(col: int, row: int) -> Dictionary:
 func get_column_height(col: int) -> int:
 	return board[col].size()
 func get_column_x(col_index: int) -> float:
-	return (col_index-1) * TILE_SIZE + self.global_position.x
+	return col_index * TILE_SIZE
 func get_top_card_world_pos(col: int) -> Vector2:
 	var row = board[col].size() - 1
 	var local_pos = Vector2(col * TILE_SIZE, row * TILE_SIZE)
