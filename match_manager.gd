@@ -26,7 +26,7 @@ func _board_of(player_id: int) -> Board:
 	
 func _on_point_scored(player_id: int, point_type: ScoreTracker.PointType) -> void:
 	pass
-func _on_match_ended():
+func _on_match_ended(winner:int):
 	pass
 
 func _on_dead_board(_player_id: int) -> void:
@@ -37,6 +37,6 @@ func _start_new_round() -> void:
 	var match_seed: int = $MatchState.get_meta("match_seed", 0)
 	# Seed derivato deterministicamente: stesso match seed + numero round
 	var round_seed: int = hash(match_seed + _round_number)
-	$Board.reset(round_seed)
-	$Board2.reset(round_seed)
+	$Board.reset(hash(round_seed + 1))
+	$Board2.reset(hash(round_seed + 2))
 	score_tracker.reset_round()

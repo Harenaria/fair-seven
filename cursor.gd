@@ -1,4 +1,5 @@
 extends Node2D
+class_name Cursor
 @onready var board:Board = self.get_parent()
 const CardScene = preload("res://card.tscn")
 
@@ -22,6 +23,31 @@ var input_launch: String   # B
 var input_rotate: String   # C
 
 signal no_captures_available(player_id: int)
+
+# Chiamati da AIController invece che da _handle_movement/_handle_actions
+func command_move(direction: int) -> void:  # -1 sinistra, +1 destra
+	if is_animating:
+		return
+	current_column = clamp(current_column + direction, 0, board.COLUMNS - 1)
+	_snap_to_column()
+
+func command_pick() -> void:
+	_try_pick()
+
+func command_launch() -> void:
+	_try_launch()
+
+func command_set_combo(idx: int) -> void:
+	if idx < capture_combinations.size():
+		capture_index = idx
+		_highlight_current_combo()
+
+# Utile all'AI per leggere lo stato senza duplicare logica
+func is_holding() -> bool:
+	return held_card != {}
+
+func is_busy() -> bool:
+	return is_animating
 
 func _ready() -> void:
 	if board:

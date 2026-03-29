@@ -24,6 +24,9 @@ var _garbage_buffer: Array[Dictionary] = []
 var _rng            := RandomNumberGenerator.new()
 var _dump_timer     : float = 0.0
 
+func get_cursor() -> Cursor:
+	return $Cursor
+
 func get_top_card(col: int):
 	if board[col].is_empty():
 		return null
@@ -85,7 +88,7 @@ func is_overflowing() -> bool:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	initialize_board()
-	populate_board(state.get_meta("match_seed", 0))
+	populate_board(hash(state.get_meta("match_seed", 0)+player_id))
 	debug_board()
 	draw_board()
 func _process(delta: float) -> void:

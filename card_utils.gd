@@ -15,7 +15,9 @@ static func gen_garbage_card(rng: RandomNumberGenerator) -> Dictionary:
 	return { value = rng.randi_range(1, 10), suit = Suit.NEUTRAL }
 
 static func is_garbage(card: Dictionary) -> bool:
-	return card["suit"] == Suit.NEUTRAL
+	if card != {}:
+		return card["suit"] == Suit.NEUTRAL
+	return true
 
 static func is_jolly(card: Dictionary) -> bool:
 	return card["value"] == 11
