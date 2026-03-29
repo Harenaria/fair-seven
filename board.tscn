@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dsawqavyslpg"]
+
+[ext_resource type="Script" uid="uid://bq16kgndyj8e" path="res://board.gd" id="1_p0ybc"]
+[ext_resource type="Script" uid="uid://cq5ekipr3021o" path="res://cursor.gd" id="2_8l818"]
+[ext_resource type="Texture2D" uid="uid://cfhyl2n2o6x2e" path="res://Pulcinella.png" id="2_psm7c"]
+
+[node name="Board" type="Node2D" unique_id=1075099540]
+script = ExtResource("1_p0ybc")
+
+[node name="Grid" type="Node2D" parent="." unique_id=1394123288]
+
+[node name="Cursor" type="Node2D" parent="." unique_id=445282911]
+position = Vector2(0, 184)
+script = ExtResource("2_8l818")
+
+[node name="Sprite2D" type="Sprite2D" parent="Cursor" unique_id=543104772]
+position = Vector2(0, -8)
+texture = ExtResource("2_psm7c")
+
+[node name="GarbageBar" type="Node2D" parent="." unique_id=68897760]
+position = Vector2(0, -16)

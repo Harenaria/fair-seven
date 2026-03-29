@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://ckfp0eebuoid0"]
+
+[ext_resource type="PackedScene" uid="uid://dsawqavyslpg" path="res://board.tscn" id="1_etvr7"]
+[ext_resource type="Script" uid="uid://wdlnwtfuxfdh" path="res://match_manager.gd" id="1_gymab"]
+[ext_resource type="Script" uid="uid://xkwveegx8r88" path="res://global_state.gd" id="2_y63cb"]
+[ext_resource type="Script" uid="uid://bn723nkvqla0a" path="res://score_tracker.gd" id="4_a4lid"]
+
+[node name="MatchScene" type="Node2D" unique_id=1622200671 node_paths=PackedStringArray("score_tracker")]
+script = ExtResource("1_gymab")
+score_tracker = NodePath("ScoreTracker")
+
+[node name="MatchState" type="Node" parent="." unique_id=1166585574]
+script = ExtResource("2_y63cb")
+metadata/match_seed = 0
+
+[node name="Board" parent="." unique_id=1075099540 node_paths=PackedStringArray("state", "score_tracker") instance=ExtResource("1_etvr7")]
+position = Vector2(16, 32)
+state = NodePath("../MatchState")
+player_id = 1
+score_tracker = NodePath("../ScoreTracker")
+
+[node name="Board2" parent="." unique_id=1482584103 node_paths=PackedStringArray("state", "score_tracker") instance=ExtResource("1_etvr7")]
+position = Vector2(208, 32)
+state = NodePath("../MatchState")
+player_id = 2
+score_tracker = NodePath("../ScoreTracker")
+
+[node name="ScoreTracker" type="Node" parent="." unique_id=1459571026]
+script = ExtResource("4_a4lid")
+
+[connection signal="tree_entered" from="." to="MatchState" method="_on_match_scene_tree_entered"]

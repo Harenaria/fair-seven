@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://cktqppuoiim1b"]
+
+[ext_resource type="Texture2D" uid="uid://dkpsogijl1vj" path="res://Suits.png" id="1_kikvd"]
+[ext_resource type="Script" uid="uid://blljq14hoejnf" path="res://card.gd" id="1_q5obu"]
+[ext_resource type="FontFile" uid="uid://blbrf4ei37cv4" path="res://m5x7.ttf" id="2_rjlel"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rjlel"]
+atlas = ExtResource("1_kikvd")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="LabelSettings" id="LabelSettings_q5obu"]
+line_spacing = 0.0
+font = ExtResource("2_rjlel")
+
+[node name="Card" type="Node2D" unique_id=139397723]
+script = ExtResource("1_q5obu")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1539744628]
+texture = SubResource("AtlasTexture_rjlel")
+
+[node name="Highlight" type="Sprite2D" parent="." unique_id=386174627]
+
+[node name="Label" type="Label" parent="." unique_id=1953152915]
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+label_settings = SubResource("LabelSettings_q5obu")
+horizontal_alignment = 1
+vertical_alignment = 1
