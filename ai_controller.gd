@@ -24,8 +24,9 @@ var step_delay: float:
 		if difficulty >= 11.0:
 			return 0.0
 		return lerpf(0.6, 0.15, _t_speed())
+
 var _skill: float:
-	get: return 0 #Change here to implement move noise
+	get: return (difficulty - 1.0) / 10.0 
 
 enum State { THINKING, MOVING_TO_PICK, PICKING, MOVING_TO_LAUNCH, LAUNCHING }
 var _state: State = State.THINKING
@@ -38,7 +39,7 @@ var _step_timer:  float = 0.0
 var _think_timer: float = 0.0
 
 func _process(delta: float) -> void:
-	if cursor == null or cursor.is_busy():
+	if cursor == null or cursor.is_busy() or cursor.frozen:
 		return
 
 	match _state:
@@ -121,7 +122,7 @@ func _score_move(picked: Dictionary, combo: CaptureResolver.CaptureCombo,
 	all_cards.append(picked)
 
 	for card in all_cards:
-		if CardUtils.is_garbage(card):
+		if CardUtils.is_neutral(card):
 			continue
 		score += 1.0
 		if card["suit"] == CardUtils.Suit.GOLD:
@@ -132,6 +133,11 @@ func _score_move(picked: Dictionary, combo: CaptureResolver.CaptureCombo,
 			score += 4.0                             # verso Primiera
 
 	score += board.get_column_height(pick_col) * 0.3  # bonus colonne alte
+	if (not CardUtils.is_jolly(picked) and
+		combo.cards.size() == 1 and
+		not CardUtils.is_neutral(combo.cards[0]) and
+		combo.cards[0]["value"] == picked["value"]):
+			score += 2.5
 
 	var noise = randf_range(-8.0, 8.0) * (1.0 - _skill)
 	return score + noise

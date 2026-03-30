@@ -9,6 +9,8 @@ var held_card: Dictionary = {}
 var card_node: Node2D
 var score_tracker: ScoreTracker
 
+var frozen: bool = false
+
 var capture_combinations: Array = []
 var capture_index: int = 0
 
@@ -69,6 +71,8 @@ func _snap_to_column() -> void:
 		_highlight_current_combo()
 
 func _process(_delta: float) -> void:
+	if frozen or is_animating:
+		return
 	_handle_movement()
 	_handle_actions()
 
@@ -170,14 +174,21 @@ func get_current_combo() -> CaptureResolver.CaptureCombo:
 func _apply_capture(combo: CaptureResolver.CaptureCombo) -> void:
 	for pos in combo.positions:
 		board.remove_card_at(pos.x, pos.y)
-
+	var is_exact = (
+		not CardUtils.is_jolly(held_card) and
+		combo.cards.size() == 1 and
+		not CardUtils.is_neutral(combo.cards[0]) and
+		combo.cards[0]["value"] == held_card["value"]
+	)
+		
 	var all_captured: Array[Dictionary] = combo.cards.duplicate()
 	all_captured.append(held_card)
 
 	if score_tracker:
 		score_tracker.register_capture(player_id, all_captured)
 		score_tracker.request_garbage_to_opponent(player_id, all_captured.size())
-
+		if is_exact:
+			score_tracker.register_exact_capture(player_id)
 	board.remove_garbage(all_captured.size())
 		
 

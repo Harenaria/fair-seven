@@ -13,6 +13,8 @@ config_version=5
 config/name="FairSeven"
 run/main_scene="uid://ckfp0eebuoid0"
 config/features=PackedStringArray("4.6", "GL Compatibility")
+boot_splash/show_image=false
+boot_splash/use_filter=false
 config/icon="res://icon.svg"
 
 [autoload]
@@ -23,6 +25,7 @@ PulseTimer="*uid://dsjtxtnu676ua"
 
 window/size/viewport_width=320
 window/size/viewport_height=224
+window/size/mode=2
 window/stretch/mode="canvas_items"
 window/stretch/scale_mode="integer"
 

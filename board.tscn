@@ -19,3 +19,12 @@ texture = ExtResource("2_psm7c")
 
 [node name="GarbageBar" type="Node2D" parent="." unique_id=68897760]
 position = Vector2(0, -16)
+
+[node name="MessageLabel" type="Label" parent="." unique_id=1017769198]
+visible = false
+offset_left = -16.0
+offset_top = 80.0
+offset_right = 112.0
+offset_bottom = 112.0
+horizontal_alignment = 1
+vertical_alignment = 1

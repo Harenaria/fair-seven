@@ -15,7 +15,7 @@ static func gen_garbage_card(rng: RandomNumberGenerator) -> Dictionary:
 	return { value = rng.randi_range(1, 10), suit = rng.randi_range(0,3) as Suit }
 
 # Legacy Function
-static func is_garbage(card: Dictionary) -> bool:
+static func is_neutral(card: Dictionary) -> bool:
 	if card != {}:
 		return card["suit"] == Suit.NEUTRAL
 	return true

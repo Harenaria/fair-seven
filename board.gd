@@ -91,11 +91,15 @@ func _ready() -> void:
 	populate_board(hash(state.get_meta("match_seed", 0)+player_id))
 	debug_board()
 	draw_board()
+	
 func _process(delta: float) -> void:
+	if $Cursor.frozen:
+		return
 	_dump_timer += delta
 	if _dump_timer >= DUMP_INTERVAL and not $Cursor.is_animating:
 		_dump_timer = 0.0
 		add_garbage(1)
+
 func add_garbage(count: int) -> void:
 	for i in range(count):
 		if _garbage_buffer.size() >= BUFFER_MAX:
@@ -120,7 +124,7 @@ func flush_garbage_buffer() -> void:
 
 func clear_garbage_from_board() -> void:
 	for col in range(COLUMNS):
-		board[col] = board[col].filter(func(c): return not CardUtils.is_garbage(c))
+		board[col] = board[col].filter(func(c): return not CardUtils.is_neutral(c))
 
 func _dump_buffer_to_board() -> void:
 	if _garbage_buffer.is_empty():
@@ -204,3 +208,11 @@ func reset(new_seed: int) -> void:
 	populate_board(new_seed)
 	flush_garbage_buffer()
 	draw_board()
+	
+@onready var message_label: Label = $MessageLabel
+func show_message(text: String) -> void:
+	message_label.text = text
+	message_label.visible = true
+
+func hide_message() -> void:
+	message_label.visible = false

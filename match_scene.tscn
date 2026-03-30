@@ -28,7 +28,7 @@ score_tracker = NodePath("../ScoreTracker")
 
 [node name="AIController" type="Node" parent="Board2" unique_id=539981043]
 script = ExtResource("4_7yec8")
-difficulty = 9.0
+difficulty = 10.0
 
 [node name="ScoreTracker" type="Node" parent="." unique_id=1459571026]
 script = ExtResource("4_a4lid")

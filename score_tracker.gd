@@ -7,7 +7,8 @@ enum PointType {
 	GOLDS,         # Denari: 5+ carte oro
 	QUOTA,         # Carte Lunghe: 20+ carte
 	SWEEP,         # Board svuotata
-	REVERSE_SWEEP  # Avversario in overflow
+	REVERSE_SWEEP, # Avversario in overflow
+	EXACT_CAPTURE  # Prendo una carta con una carta
 }
 
 signal point_scored(player_id: int, point_type: PointType)
@@ -47,7 +48,7 @@ func _empty_stats() -> Dictionary:
 func register_capture(player_id: int, cards: Array[Dictionary]) -> void:
 	var s: Dictionary = _round_stats[player_id]
 	for card in cards:
-		if CardUtils.is_garbage(card):
+		if CardUtils.is_neutral(card):
 			continue
 		s["total"] += 1
 		if card["suit"] == CardUtils.Suit.GOLD:
@@ -59,11 +60,13 @@ func register_capture(player_id: int, cards: Array[Dictionary]) -> void:
 				s["sevens"].append(card["suit"])
 			if s["sevens"].size() >= SEVENS_TOTAL:
 				_try_claim(player_id, PointType.ALL_SEVEN)
-
 	if s["golds"] >= GOLD_THRESHOLD:
 		_try_claim(player_id, PointType.GOLDS)
 	if s["total"] >= QUOTA_THRESHOLD:
 		_try_claim(player_id, PointType.QUOTA)
+
+func register_exact_capture(player_id: int) -> void:
+	_try_claim(player_id, PointType.EXACT_CAPTURE)
 
 # Chiamato da board.gd quando la board è completamente svuotata
 func register_sweep(player_id: int) -> void:
@@ -86,7 +89,7 @@ func _try_claim(player_id: int, point_type: PointType) -> void:
 			#match_points[current_holder] -= 1
 		#else:
 			#return
-	if _round_claimed.has(point_type):
+	if _round_claimed.has(point_type) and not point_type == PointType.EXACT_CAPTURE:
 		return
 	_round_claimed[point_type] = player_id
 	match_points[player_id] += 1
